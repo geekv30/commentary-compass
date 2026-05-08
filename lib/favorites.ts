@@ -1,4 +1,4 @@
-export const FAVORITES = ['Harsha Bhogle', 'R Ashwin', 'Jatin Sapru'];
+export const FAVORITES = ['Harsha Bhogle', 'R Ashwin', 'Jatin Sapru', 'Mpumelelo Mbangwa'];
 
 export function isFavorite(name: string): boolean {
   const lower = name.toLowerCase();
