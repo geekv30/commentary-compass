@@ -32,19 +32,27 @@ export function AdminGate() {
         <CardContent>
           <form action={formAction} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="secret">Admin secret</Label>
+              <Label htmlFor="secret" className="text-sm">
+                Admin secret
+              </Label>
               <Input
                 id="secret"
                 name="secret"
                 type="password"
                 autoComplete="off"
                 required
+                className="h-12 text-base"
               />
             </div>
             {state?.error ? (
               <p className="text-sm text-destructive">{state.error}</p>
             ) : null}
-            <Button type="submit" className="w-full" disabled={pending}>
+            <Button
+              type="submit"
+              size="lg"
+              className="w-full h-12 text-base"
+              disabled={pending}
+            >
               {pending ? 'Checking…' : 'Continue'}
             </Button>
           </form>

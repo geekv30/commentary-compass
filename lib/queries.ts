@@ -1,5 +1,5 @@
 import 'server-only';
-import { eq, desc, asc, sql } from 'drizzle-orm';
+import { eq, desc, asc, inArray } from 'drizzle-orm';
 import {
   db,
   match,
@@ -78,7 +78,7 @@ export async function getMatchesForDate(
   const panels = await db
     .select()
     .from(panelAnnouncement)
-    .where(sql`${panelAnnouncement.matchId} = ANY(${matchIds})`);
+    .where(inArray(panelAnnouncement.matchId, matchIds));
 
   const panelIds = panels.map((p) => p.id);
   const entries =
@@ -86,7 +86,7 @@ export async function getMatchesForDate(
       ? await db
           .select()
           .from(panelEntry)
-          .where(sql`${panelEntry.panelAnnouncementId} = ANY(${panelIds})`)
+          .where(inArray(panelEntry.panelAnnouncementId, panelIds))
       : [];
 
   const feeds = await db.select().from(feed);
@@ -107,7 +107,7 @@ export async function getMatchById(id: string): Promise<MatchWithPanels | null> 
       ? await db
           .select()
           .from(panelEntry)
-          .where(sql`${panelEntry.panelAnnouncementId} = ANY(${panelIds})`)
+          .where(inArray(panelEntry.panelAnnouncementId, panelIds))
       : [];
   const feeds = await db.select().from(feed);
   const [withPanels] = attachPanels(matches, panels, entries, feeds);
@@ -127,14 +127,14 @@ export async function getRecentMatches(
   const panels = await db
     .select()
     .from(panelAnnouncement)
-    .where(sql`${panelAnnouncement.matchId} = ANY(${matchIds})`);
+    .where(inArray(panelAnnouncement.matchId, matchIds));
   const panelIds = panels.map((p) => p.id);
   const entries =
     panelIds.length > 0
       ? await db
           .select()
           .from(panelEntry)
-          .where(sql`${panelEntry.panelAnnouncementId} = ANY(${panelIds})`)
+          .where(inArray(panelEntry.panelAnnouncementId, panelIds))
       : [];
   const feeds = await db.select().from(feed);
   return attachPanels(matches, panels, entries, feeds);
